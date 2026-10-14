@@ -2,7 +2,7 @@
 
 上传一款或多款服装正面照，让 AI 生成自然侧挂、正面悬挂图片，再制作带品牌设计的衣架购物交互单页。
 
-**[在线体验 Demo](https://vivilin826.github.io/hanger-shopping-page/)** · **[下载 Skill ZIP](downloads/hanger-shopping-page-v1.zip)** · **[查看 Skill](hanger-shopping-page/SKILL.md)** · **[制作过程与使用对话](docs/制作过程与对话.md)**
+**[手机样机 Demo](https://vivilin826.github.io/hanger-shopping-page/mobile-preview.html)** · **[在线体验 Demo](https://vivilin826.github.io/hanger-shopping-page/)** · **[下载 Skill ZIP](downloads/hanger-shopping-page-v1.zip)** · **[查看 Skill](hanger-shopping-page/SKILL.md)** · **[制作过程与使用对话](docs/制作过程与对话.md)**
 
 [![衣架购物交互演示：拖拽转正、相邻衣服让位、轻点进入详情](docs/demo.gif)](https://vivilin826.github.io/hanger-shopping-page/)
 
@@ -92,3 +92,13 @@ docs/
 已检查一款、三款、十款配置的构建、单款布局、可选价格、拖拽与轻点区分、静止详情、停稳和资源内嵌。每次生成的新服装素材仍需对照原图检查；模板检查不等于所有客户图片都已通过视觉验收。
 
 字体许可证随资源保留，见 [字体目录](hanger-shopping-page/assets/frontend/assets/fonts/)。
+
+## 手机版 Demo 与小红书小工具
+
+**[手机样机 Demo](https://vivilin826.github.io/hanger-shopping-page/mobile-preview.html)** · **[手机版直接体验](https://vivilin826.github.io/hanger-shopping-page/mobile.html)** · **[小红书工具 ZIP](downloads/shopping-hanger-xiaohongshu-mobile.zip)**
+
+首页展示前三款侧挂；拖动实际衣物拨正并居中；空白、品名及透明区域拖动用于沿杆浏览。轻点打开静止详情。背景音乐通过 Web Audio 实时合成，首次触摸后播放，可关闭；包中没有MP3或其他音频文件。此包已做本地结构检查，平台部署结果以实际上传为准。
+
+![Shopping Hanger 手机版封面](docs/Shopping-Hanger-封面-3比4.png)
+
+新版素材：**[3:4封面](docs/Shopping-Hanger-封面-3比4.png)** · **[1:1图标](docs/Shopping-Hanger-图标-1比1.png)**
