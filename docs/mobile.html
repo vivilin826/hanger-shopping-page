@@ -859,12 +859,49 @@ DISPLAY.forEach((index,i)=>{
 // 一套网格材质渲染器，沿肩部→衣摆分六段跟随；无需GLB或额外服装模型。
 try {clothRenderer=new RackClothRenderer(models,SUSPENSION,garmentDynamics,rackItems,$('#rack-viewport'),wakeReactions);}
 catch(error){console.warn('布料网格不可用，保留静态服装图片。',error);}
+// A finger-sized tolerance around the actual silhouette, never around labels or slots.
+function forgivingGarmentHit(x,y){
+  if(!clothRenderer||!clothRenderer.available)return null;
+  const vp=rackViewport.getBoundingClientRect();
+  if(x<vp.left||x>vp.right||y<vp.top||y>vp.bottom)return null;
+  let winner=null,nearest=13;
+  const distance=(px,py,a,b)=>{
+    const dx=b.x-a.x,dy=b.y-a.y,len=dx*dx+dy*dy;
+    const t=len?Math.max(0,Math.min(1,((px-a.x)*dx+(py-a.y)*dy)/len)):0;
+    return Math.hypot(px-a.x-t*dx,py-a.y-t*dy);
+  };
+  models.forEach((model,index)=>{
+    if(model.parentElement!==rackItems[index])return;
+    const box=model.getBoundingClientRect(),scale=box.width/280;
+    if(!scale)return;
+    const state=garmentDynamics[index];
+    for(const key of ['side','front']){
+      if(key==='front'&&state.mix<.1||key==='side'&&state.mix>.9)continue;
+      const shape=clothRenderer.items[index]?.[key];if(!shape?.points?.length)continue;
+      // The cached alpha-derived outline uses only visible garment pixels.
+      let previousLeft=null,previousRight=null;
+      for(let n=0;n<shape.points.length;n+=2){
+        const a=shape.points[n],b=shape.points[n+1];
+        const pl=clothRenderer.point(index,key,a[0],a[1]),pr=clothRenderer.point(index,key,b[0],b[1]);
+        const left={x:box.left+pl.x*scale,y:box.top+pl.y*scale};
+        const right={x:box.left+pr.x*scale,y:box.top+pr.y*scale};
+        let d=distance(x,y,left,right);
+        if(previousLeft)d=Math.min(d,distance(x,y,previousLeft,left),distance(x,y,previousRight,right));
+        if(d<nearest){nearest=d;winner=index;}
+        previousLeft=left;previousRight=right;
+      }
+    }
+  });
+  return winner;
+}
+
 const rackViewport=$('#rack-viewport');
 const rackGestureSurface=collection;
 rackGestureSurface.addEventListener('pointerdown',e=>{
   if(mode!=='rack'||e.button>0||!e.isPrimary)return;
   if(e.target.closest('a,button')&&!e.target.closest('.rack-item'))return;
-  const hit=innerWidth<=700?clothRenderer?.hitTest(e.clientX,e.clientY,rackPreviewIndex):null;
+  const preciseHit=innerWidth<=700?clothRenderer?.hitTest(e.clientX,e.clientY,rackPreviewIndex):null;
+  const hit=innerWidth<=700?(preciseHit??forgivingGarmentHit(e.clientX,e.clientY)):null;
   const button=innerWidth<=700?(hit===null||hit===undefined?null:rackItems[hit]):e.target.closest('.rack-item');
   if(innerWidth<=700&&!button)return;
   rackGesture={id:e.pointerId,index:button?Number(button.dataset.product):null,start:e.clientX,startY:e.clientY,last:e.clientX,

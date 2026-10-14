@@ -865,12 +865,49 @@ DISPLAY.forEach((index,i)=&gt;{
 // 一套网格材质渲染器，沿肩部→衣摆分六段跟随；无需GLB或额外服装模型。
 try {clothRenderer=new RackClothRenderer(models,SUSPENSION,garmentDynamics,rackItems,$(&#x27;#rack-viewport&#x27;),wakeReactions);}
 catch(error){console.warn(&#x27;布料网格不可用，保留静态服装图片。&#x27;,error);}
+// A finger-sized tolerance around the actual silhouette, never around labels or slots.
+function forgivingGarmentHit(x,y){
+  if(!clothRenderer||!clothRenderer.available)return null;
+  const vp=rackViewport.getBoundingClientRect();
+  if(x&lt;vp.left||x&gt;vp.right||y&lt;vp.top||y&gt;vp.bottom)return null;
+  let winner=null,nearest=13;
+  const distance=(px,py,a,b)=&gt;{
+    const dx=b.x-a.x,dy=b.y-a.y,len=dx*dx+dy*dy;
+    const t=len?Math.max(0,Math.min(1,((px-a.x)*dx+(py-a.y)*dy)/len)):0;
+    return Math.hypot(px-a.x-t*dx,py-a.y-t*dy);
+  };
+  models.forEach((model,index)=&gt;{
+    if(model.parentElement!==rackItems[index])return;
+    const box=model.getBoundingClientRect(),scale=box.width/280;
+    if(!scale)return;
+    const state=garmentDynamics[index];
+    for(const key of [&#x27;side&#x27;,&#x27;front&#x27;]){
+      if(key===&#x27;front&#x27;&amp;&amp;state.mix&lt;.1||key===&#x27;side&#x27;&amp;&amp;state.mix&gt;.9)continue;
+      const shape=clothRenderer.items[index]?.[key];if(!shape?.points?.length)continue;
+      // The cached alpha-derived outline uses only visible garment pixels.
+      let previousLeft=null,previousRight=null;
+      for(let n=0;n&lt;shape.points.length;n+=2){
+        const a=shape.points[n],b=shape.points[n+1];
+        const pl=clothRenderer.point(index,key,a[0],a[1]),pr=clothRenderer.point(index,key,b[0],b[1]);
+        const left={x:box.left+pl.x*scale,y:box.top+pl.y*scale};
+        const right={x:box.left+pr.x*scale,y:box.top+pr.y*scale};
+        let d=distance(x,y,left,right);
+        if(previousLeft)d=Math.min(d,distance(x,y,previousLeft,left),distance(x,y,previousRight,right));
+        if(d&lt;nearest){nearest=d;winner=index;}
+        previousLeft=left;previousRight=right;
+      }
+    }
+  });
+  return winner;
+}
+
 const rackViewport=$(&#x27;#rack-viewport&#x27;);
 const rackGestureSurface=collection;
 rackGestureSurface.addEventListener(&#x27;pointerdown&#x27;,e=&gt;{
   if(mode!==&#x27;rack&#x27;||e.button&gt;0||!e.isPrimary)return;
   if(e.target.closest(&#x27;a,button&#x27;)&amp;&amp;!e.target.closest(&#x27;.rack-item&#x27;))return;
-  const hit=innerWidth&lt;=700?clothRenderer?.hitTest(e.clientX,e.clientY,rackPreviewIndex):null;
+  const preciseHit=innerWidth&lt;=700?clothRenderer?.hitTest(e.clientX,e.clientY,rackPreviewIndex):null;
+  const hit=innerWidth&lt;=700?(preciseHit??forgivingGarmentHit(e.clientX,e.clientY)):null;
   const button=innerWidth&lt;=700?(hit===null||hit===undefined?null:rackItems[hit]):e.target.closest(&#x27;.rack-item&#x27;);
   if(innerWidth&lt;=700&amp;&amp;!button)return;
   rackGesture={id:e.pointerId,index:button?Number(button.dataset.product):null,start:e.clientX,startY:e.clientY,last:e.clientX,
