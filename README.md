@@ -99,6 +99,6 @@ docs/
 
 首页展示前三款侧挂；拖动实际衣物拨正并居中；空白、品名及透明区域拖动用于沿杆浏览。轻点打开静止详情。背景音乐通过 Web Audio 实时合成，首次触摸后播放，可关闭；包中没有MP3或其他音频文件。此包已做本地结构检查，平台部署结果以实际上传为准。
 
-![Shopping Hanger 手机版封面](docs/Shopping-Hanger-封面-3比4.png)
+![Shopping Hanger 手机版封面](docs/原页面封面-3比4-居中排版.png)
 
-新版素材：**[3:4封面](docs/Shopping-Hanger-封面-3比4.png)** · **[1:1图标](docs/Shopping-Hanger-图标-1比1.png)**
+新版素材：**[3:4封面](docs/原页面封面-3比4-居中排版.png)** · **[1:1图标](docs/Shopping-Hanger-图标-1比1.png)**
