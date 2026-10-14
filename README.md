@@ -2,9 +2,15 @@
 
 将服装正面照片制作成自然侧挂、正面悬挂素材与衣架购物交互单页。
 
-**[手机样机 Demo](https://vivilin826.github.io/hanger-shopping-page/mobile-preview.html)** · **[下载 Skill ZIP](downloads/hanger-shopping-page-v1.zip)** · **[查看 Skill](hanger-shopping-page/SKILL.md)**
+**[电脑版网页 Demo](https://vivilin826.github.io/hanger-shopping-page/)** · **[手机样机 Demo](https://vivilin826.github.io/hanger-shopping-page/mobile-preview.html)** · **[下载 Skill ZIP](downloads/hanger-shopping-page-v1.zip)** · **[查看 Skill](hanger-shopping-page/SKILL.md)**
 
 > **仅限学习和非商业使用。允许 Fork、修改和非商业再分发；未经书面授权禁止商用。** 查看 [完整许可证](LICENSE) / [中文许可说明](LICENSE.zh-CN.md)。
+
+## 电脑版网页交互 Demo
+
+[![网页版衣架购物交互演示](docs/demo.gif)](https://vivilin826.github.io/hanger-shopping-page/)
+
+点击动图体验电脑版网页：悬停显示品名，拖拽在原架拨正并带动邻衣让位，轻点进入详情；详情空白处或 CLOSE 可关闭。
 
 ## 手机交互
 
