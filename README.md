@@ -2,11 +2,15 @@
 
 上传一款或多款服装正面照，让 AI 生成自然侧挂、正面悬挂图片，再制作带品牌设计的衣架购物交互单页。
 
-**[在线体验 Demo](https://vivilin826.github.io/hanger-shopping-page/)** · **[下载 Skill ZIP](downloads/hanger-shopping-page-v1.zip)** · **[查看 Skill](hanger-shopping-page/SKILL.md)**
+**[在线体验 Demo](https://vivilin826.github.io/hanger-shopping-page/)** · **[下载 Skill ZIP](downloads/hanger-shopping-page-v1.zip)** · **[查看 Skill](hanger-shopping-page/SKILL.md)** · **[制作过程与使用对话](docs/制作过程与对话.md)**
 
 [![衣架购物交互演示：拖拽转正、相邻衣服让位、轻点进入详情](docs/demo.gif)](https://vivilin826.github.io/hanger-shopping-page/)
 
 *动图来自实际制作的第二版页面录屏。点击动图可打开交互 Demo；演示包含 AI 生成的悬挂素材。*
+
+## 这个 Skill 是怎么做出来的
+
+先通过多轮对话完成第二版页面，再把素材配对、木架遮挡、拖拽与轻点分离、布料滞后等经验封装成 Skill。[查看真实制作过程与关键对话](docs/制作过程与对话.md)，文末另附客户调用示例。
 
 ## 客户只需提供照片
 
