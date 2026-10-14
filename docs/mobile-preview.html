@@ -1242,6 +1242,54 @@ rackRange.addEventListener(&#x27;input&#x27;,()=&gt;{
 });
 rackViewport.addEventListener(&#x27;scroll&#x27;,syncRackRange,{passive:true});
 window.addEventListener(&#x27;resize&#x27;,()=&gt;requestAnimationFrame(syncRackRange));syncRackRange();
+
+// Close a detail only on a tap on genuinely empty space; keep controls and swipes intact.
+(function(){
+var start=null,moved=false,cancelled=false;
+var masks=new WeakMap();
+function maskFor(image){
+ if(!image||!image.complete||!image.naturalWidth)return null;
+ if(masks.has(image))return masks.get(image);
+ try{var canvas=document.createElement(&#x27;canvas&#x27;);canvas.width=96;canvas.height=160;var context=canvas.getContext(&#x27;2d&#x27;);context.drawImage(image,0,0,96,160);var mask=context.getImageData(0,0,96,160).data;masks.set(image,mask);return mask}catch(e){return null}
+}
+function opaque(image,u,v){
+ if(u&lt;0||u&gt;1||v&lt;0||v&gt;1)return false;
+ var mask=maskFor(image);if(!mask)return true;
+ return mask[(Math.min(159,Math.floor(v*160))*96+Math.min(95,Math.floor(u*96)))*4+3]&gt;30;
+}
+function onGarment(x,y){
+ var model=models[activeIndex];if(!model)return false;
+ var image=model.querySelector(activeView===&#x27;side&#x27;?&#x27;.garment-side&#x27;:&#x27;.garment-front&#x27;);
+ if(typeof clothRenderer!==&#x27;undefined&#x27;&amp;&amp;clothRenderer&amp;&amp;clothRenderer.available){
+  var box=model.getBoundingClientRect(),scale=box.width/280;
+  if(!scale)return false;
+  var key=activeView===&#x27;side&#x27;?&#x27;side&#x27;:&#x27;front&#x27;,px=(x-box.left)/scale,py=(y-box.top)/scale,u=.5,v=.5;
+  // Invert the renderer&#x27;s current deformation to test actual transparent pixels.
+  for(var n=0;n&lt;12;n++){
+   var p=clothRenderer.point(activeIndex,key,u,v),du=clothRenderer.point(activeIndex,key,u+.001,v),dv=clothRenderer.point(activeIndex,key,u,v+.001);
+   var ax=(du.x-p.x)/.001,ay=(du.y-p.y)/.001,bx=(dv.x-p.x)/.001,by=(dv.y-p.y)/.001,det=ax*by-ay*bx;
+   if(Math.abs(det)&lt;.00001)return false;
+   var dx=px-p.x,dy=py-p.y;u+=(dx*by-dy*bx)/det;v+=(dy*ax-dx*ay)/det;
+   if(Math.abs(dx)+Math.abs(dy)&lt;.01)break;
+  }
+  return opaque(image,u,v);
+ }
+ if(!image)return false;
+ var r=image.getBoundingClientRect(),ratio=image.naturalWidth/image.naturalHeight;
+ var width=Math.min(r.width,r.height*ratio),height=width/ratio;
+ return opaque(image,(x-r.left-(r.width-width)/2)/width,(y-r.top-(r.height-height)/2)/height);
+}
+document.addEventListener(&#x27;pointerdown&#x27;,function(e){start={x:e.clientX,y:e.clientY,detail:mode===&#x27;detail&#x27;};moved=false;cancelled=false},{capture:true,passive:true});
+document.addEventListener(&#x27;pointermove&#x27;,function(e){if(start&amp;&amp;Math.hypot(e.clientX-start.x,e.clientY-start.y)&gt;8)moved=true},{capture:true,passive:true});
+document.addEventListener(&#x27;pointercancel&#x27;,function(){cancelled=true},{capture:true,passive:true});
+document.addEventListener(&#x27;click&#x27;,function(e){
+ if(!detailOpen||mode!==&#x27;detail&#x27;||!start||!start.detail||moved||cancelled)return;
+ if(e.target.closest(&#x27;button,a,input,select,textarea,dialog,[role=&quot;button&quot;]&#x27;))return;
+ if(onGarment(e.clientX,e.clientY))return;
+ closeDetail();
+});
+})();
+
 &lt;/script&gt;
 &lt;script&gt;
 (()=&gt;{

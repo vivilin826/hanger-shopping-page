@@ -1236,6 +1236,54 @@ rackRange.addEventListener('input',()=>{
 });
 rackViewport.addEventListener('scroll',syncRackRange,{passive:true});
 window.addEventListener('resize',()=>requestAnimationFrame(syncRackRange));syncRackRange();
+
+// Close a detail only on a tap on genuinely empty space; keep controls and swipes intact.
+(function(){
+var start=null,moved=false,cancelled=false;
+var masks=new WeakMap();
+function maskFor(image){
+ if(!image||!image.complete||!image.naturalWidth)return null;
+ if(masks.has(image))return masks.get(image);
+ try{var canvas=document.createElement('canvas');canvas.width=96;canvas.height=160;var context=canvas.getContext('2d');context.drawImage(image,0,0,96,160);var mask=context.getImageData(0,0,96,160).data;masks.set(image,mask);return mask}catch(e){return null}
+}
+function opaque(image,u,v){
+ if(u<0||u>1||v<0||v>1)return false;
+ var mask=maskFor(image);if(!mask)return true;
+ return mask[(Math.min(159,Math.floor(v*160))*96+Math.min(95,Math.floor(u*96)))*4+3]>30;
+}
+function onGarment(x,y){
+ var model=models[activeIndex];if(!model)return false;
+ var image=model.querySelector(activeView==='side'?'.garment-side':'.garment-front');
+ if(typeof clothRenderer!=='undefined'&&clothRenderer&&clothRenderer.available){
+  var box=model.getBoundingClientRect(),scale=box.width/280;
+  if(!scale)return false;
+  var key=activeView==='side'?'side':'front',px=(x-box.left)/scale,py=(y-box.top)/scale,u=.5,v=.5;
+  // Invert the renderer's current deformation to test actual transparent pixels.
+  for(var n=0;n<12;n++){
+   var p=clothRenderer.point(activeIndex,key,u,v),du=clothRenderer.point(activeIndex,key,u+.001,v),dv=clothRenderer.point(activeIndex,key,u,v+.001);
+   var ax=(du.x-p.x)/.001,ay=(du.y-p.y)/.001,bx=(dv.x-p.x)/.001,by=(dv.y-p.y)/.001,det=ax*by-ay*bx;
+   if(Math.abs(det)<.00001)return false;
+   var dx=px-p.x,dy=py-p.y;u+=(dx*by-dy*bx)/det;v+=(dy*ax-dx*ay)/det;
+   if(Math.abs(dx)+Math.abs(dy)<.01)break;
+  }
+  return opaque(image,u,v);
+ }
+ if(!image)return false;
+ var r=image.getBoundingClientRect(),ratio=image.naturalWidth/image.naturalHeight;
+ var width=Math.min(r.width,r.height*ratio),height=width/ratio;
+ return opaque(image,(x-r.left-(r.width-width)/2)/width,(y-r.top-(r.height-height)/2)/height);
+}
+document.addEventListener('pointerdown',function(e){start={x:e.clientX,y:e.clientY,detail:mode==='detail'};moved=false;cancelled=false},{capture:true,passive:true});
+document.addEventListener('pointermove',function(e){if(start&&Math.hypot(e.clientX-start.x,e.clientY-start.y)>8)moved=true},{capture:true,passive:true});
+document.addEventListener('pointercancel',function(){cancelled=true},{capture:true,passive:true});
+document.addEventListener('click',function(e){
+ if(!detailOpen||mode!=='detail'||!start||!start.detail||moved||cancelled)return;
+ if(e.target.closest('button,a,input,select,textarea,dialog,[role="button"]'))return;
+ if(onGarment(e.clientX,e.clientY))return;
+ closeDetail();
+});
+})();
+
 </script>
 <script>
 (()=>{
