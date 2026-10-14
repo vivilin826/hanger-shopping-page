@@ -102,3 +102,7 @@ docs/
 ![Shopping Hanger 手机版封面](docs/原页面封面-3比4-居中排版.png)
 
 新版素材：**[3:4封面](docs/原页面封面-3比4-居中排版.png)** · **[1:1图标](docs/Shopping-Hanger-图标-1比1.png)**
+
+### 小红书音乐适配说明
+
+小红书容器禁止audio的data/blob源，上传文件白名单亦不含MP3/WAV。工具ZIP改用视频音轨的8位PCM采样和Web Audio缓冲播放，不使用媒体URL；此路径未获官方明确兼容保证，需平台模拟器及Android/iOS真机验证。普通浏览器Demo仍使用原生音轨播放器。若容器禁用Web Audio，则应移除工具的音乐功能。
