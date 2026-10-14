@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#eeeae2">
+  <meta name="description" content="店铺。像走进一家小店，慢慢挑选你的下一件心动。服装陈列，拖拽原架拨正，轻点细看。">
+  <title>衣架购物</title>
+  <link rel="preload" href="assets/fonts/caveat.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=6">
+  <script src="rack-physics.js?v=7" defer></script>
+  <script src="cloth-mesh.js?v=7" defer></script>
+  <script src="app.js?v=6" defer></script>
+</head>
+<body>
+  <svg class="texture" aria-hidden="true"><filter id="linen"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#linen)" opacity=".27"/></svg>
+  <div class="light-wash" aria-hidden="true"></div>
+  <header class="site-header">
+    <button class="nav-link" id="about-button">ABOUT <span>关于店铺</span></button>
+    <a class="brand" href="#" aria-label="店铺，返回衣架全景">
+      <span class="brand-word">Atelier<span class="brand-star">✳</span></span>
+      <span class="brand-caption">慢慢挑选喜欢的那一件</span>
+    </a>
+    <button class="nav-link nav-right" id="contact-button">CONTACT <span>联系店铺 <span aria-hidden="true">↗</span></span></button>
+  </header>
+
+  <main>
+    <section id="collection-view" class="collection-view" aria-labelledby="collection-title">
+      <h1 id="collection-title" class="visually-hidden">服装陈列</h1>
+
+      <div class="rack-viewport" id="rack-viewport">
+        <div class="rack-scene" id="rack-scene" aria-label="服装，点击衣服查看详情">
+          <div class="rod-shadow" aria-hidden="true"></div>
+          <div class="rack-rod" aria-hidden="true"><i></i></div>
+          <div id="garment-rack" class="garment-rack"></div>
+        </div>
+      </div>
+
+      <div class="collection-meta">
+        <p class="rack-instruction"><span class="desktop-hint">拖拽拨正 · 轻点详情 · 点空白归位</span><span class="mobile-hint">拖拽拨正 · 轻点详情 · 点空白归位</span></p>
+      </div>
+    </section>
+
+    <section id="detail-view" class="detail-view" role="dialog" aria-modal="true" aria-labelledby="detail-name" aria-hidden="true" hidden>
+      <button class="nav-link close-detail" id="detail-close-button">CLOSE <span aria-hidden="true">×</span></button>
+      <div class="detail-stage" id="detail-stage">
+        <button class="circle-arrow previous" id="previous-product" aria-label="上一款"><span aria-hidden="true">‹</span></button>
+        <div class="detail-product" id="detail-product"></div>
+        <button class="circle-arrow next" id="next-product" aria-label="下一款"><span aria-hidden="true">›</span></button>
+      </div>
+      <div class="detail-caption">
+        <span id="detail-number" class="detail-number">01 <i>/</i> 01</span>
+        <h2 id="detail-name" tabindex="-1"></h2>
+        <p id="detail-english" class="detail-english"></p>
+        <div class="view-controls" aria-label="查看服装视角">
+          <button class="view-button active" id="front-view" aria-pressed="true">正面 <small>FRONT</small></button><span class="view-divider" aria-hidden="true">/</span><button class="view-button" id="side-view" aria-pressed="false">侧面 <small>SIDE</small></button>
+        </div>
+      </div>
+      <div id="detail-footer-mount"></div>
+    </section>
+  </main>
+
+  <div id="footer-mount"><footer class="site-footer" id="site-footer">
+    <div class="footer-side">THE EVERYDAY EDIT <span>/ COLLECTION</span></div>
+    <div class="cta-group"><button class="primary-button" id="availability-button">SEE AVAILABILITY <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button><span class="cta-caption">看看哪一件，属于你的日常</span></div>
+    <div class="footer-side footer-right">Take your time.</div>
+  </footer></div>
+
+  <dialog id="info-dialog" class="info-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-inner"><button class="dialog-close" aria-label="关闭弹窗">×</button><p class="eyebrow" id="dialog-eyebrow"></p><h2 id="dialog-title"></h2><div id="dialog-content"></div></div>
+  </dialog>
+  <dialog id="availability-dialog" class="availability-dialog" aria-labelledby="availability-title">
+    <div class="availability-inner"><button class="dialog-close" aria-label="关闭款式清单">×</button><p class="eyebrow">YOUR LITTLE EDIT <span class="edition">/ 款式清单</span></p><h2 id="availability-title">把心动，记下来。</h2><p class="availability-intro">选一款喜欢的，复制款式信息向店主询问。<br>库存与尺码以店主确认为准。</p><div id="availability-list" class="availability-list"></div><button id="copy-inquiry" class="primary-button copy-button">复制询款信息 <span aria-hidden="true">↗</span></button><p class="availability-status" id="availability-status" role="status">请选择一款服装</p></div>
+  </dialog>
+  <div class="live-status" id="live-status" role="status" aria-live="polite"></div>
+</body>
+</html>

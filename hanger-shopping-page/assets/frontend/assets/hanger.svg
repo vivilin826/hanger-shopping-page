@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="180" viewBox="0 0 420 180" fill="none">
+  <defs>
+    <linearGradient id="wood" x1="168" y1="81" x2="201" y2="178" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D6B68D"/>
+      <stop offset=".28" stop-color="#CDA77B"/>
+      <stop offset=".63" stop-color="#B98A5B"/>
+      <stop offset="1" stop-color="#A97C52"/>
+    </linearGradient>
+    <linearGradient id="chrome" x1="184" y1="20" x2="224" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9E9A91"/>
+      <stop offset=".18" stop-color="#F9F9F2"/>
+      <stop offset=".38" stop-color="#AAA99F"/>
+      <stop offset=".55" stop-color="#F2F2EA"/>
+      <stop offset=".78" stop-color="#74786F"/>
+      <stop offset="1" stop-color="#D5D7CD"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="210" y1="84" x2="210" y2="170" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F3D5AB" stop-opacity=".85"/>
+      <stop offset=".7" stop-color="#D6B08A" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#6F4B30" stop-opacity=".3"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-15%" width="120%" height="145%">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="2.2" flood-color="#594735" flood-opacity=".16"/>
+    </filter>
+    <clipPath id="woodClip">
+      <path fill-rule="evenodd" d="M200 82C206 78 214 78 220 82L393 143C401 146 405 152 402 159C400 166 394 169 385 169H35C26 169 20 166 18 159C15 152 19 146 27 143L200 82ZM201 98L62 148C57 150 58 154 64 154H356C362 154 363 150 358 148L219 98C213 96 207 96 201 98Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- A slim, open chrome hook. The exposed neck ends inside the wood. -->
+  <path d="M210 86V55C210 45 218 42 223 35C232 24 227 8 215 6C202 3 188 12 188 25" stroke="#65675F" stroke-opacity=".28" stroke-width="6.5" stroke-linecap="round"/>
+  <path d="M210 86V55C210 45 218 42 223 35C232 24 227 8 215 6C202 3 188 12 188 25" stroke="url(#chrome)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M209 84V55C209 44 217 40 222 34C230 24 226 10 215 8C203 5 190 13 190 24" stroke="#FFFFFF" stroke-opacity=".66" stroke-width=".9" stroke-linecap="round"/>
+
+  <g filter="url(#shadow)">
+    <!-- One continuous rounded wooden form, with an open triangular center. -->
+    <path fill-rule="evenodd" d="M200 82C206 78 214 78 220 82L393 143C401 146 405 152 402 159C400 166 394 169 385 169H35C26 169 20 166 18 159C15 152 19 146 27 143L200 82ZM201 98L62 148C57 150 58 154 64 154H356C362 154 363 150 358 148L219 98C213 96 207 96 201 98Z" fill="url(#wood)"/>
+    <g clip-path="url(#woodClip)" stroke-linecap="round">
+      <!-- Long, sparse growth lines follow the shoulders; no bitmap texture. -->
+      <path d="M8 157C89 127 152 109 205 88C211 86 215 87 223 90C287 112 345 135 411 157" stroke="#8D613D" stroke-opacity=".17" stroke-width=".8"/>
+      <path d="M9 163C91 132 148 118 201 96C211 92 215 93 226 97C296 121 344 140 410 163" stroke="#F6D6AC" stroke-opacity=".28" stroke-width="1.1"/>
+      <path d="M23 144C84 123 130 105 173 91M243 90C289 105 353 127 399 145" stroke="#9B6C45" stroke-opacity=".14" stroke-width=".7"/>
+      <path d="M29 160C102 159 137 164 207 160C262 157 315 164 392 159" stroke="#EBC49B" stroke-opacity=".3" stroke-width=".8"/>
+      <path d="M28 165C102 163 134 168 207 164C270 161 324 168 393 163" stroke="#8C603E" stroke-opacity=".2" stroke-width=".7"/>
+      <path d="M75 126C108 116 136 107 161 99M274 104C300 114 335 127 365 136" stroke="#FBE2BF" stroke-opacity=".3" stroke-width=".65"/>
+      <path d="M46 155C53 153 59 152 66 151M341 150C350 152 357 153 366 156" stroke="#9C704A" stroke-opacity=".2" stroke-width=".65"/>
+    </g>
+    <path d="M30 147L202 85C207 83 213 83 218 85L390 147" stroke="url(#rim)" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M22 157C24 163 29 165 36 165H384C391 165 396 163 398 157" stroke="#815A3D" stroke-opacity=".22" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M65 155H355" stroke="#F7D2A4" stroke-opacity=".43" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M202 98C207 96 213 96 218 98" stroke="#805837" stroke-opacity=".24" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <!-- A small inset fixes the hook into the timber. -->
+  <ellipse cx="210" cy="83" rx="4.3" ry="1.2" fill="#856244" fill-opacity=".34"/>
+  <path d="M210 81V85" stroke="#D5D6CA" stroke-width="3" stroke-linecap="round"/>
+</svg>

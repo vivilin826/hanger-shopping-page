@@ -1,0 +1,4 @@
+interface:
+  display_name: "衣架购物页生成器"
+  short_description: "上传服装正面照，生成配对悬挂图与带品牌布局的衣架购物交互单页"
+  default_prompt: "请用 $hanger-shopping-page 把我的服装正面照做成衣架购物交互页，没有品牌和价格信息时采用默认展示。"
